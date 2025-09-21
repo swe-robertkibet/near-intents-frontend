@@ -1,103 +1,274 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Menu, X, Lock, Search, Plus } from "lucide-react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showNetworkModal, setShowNetworkModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+  const networks = [
+    { id: "eth", name: "ETH", icon: "🔷", selected: true },
+    { id: "sol", name: "SOL", icon: "🟣", selected: false },
+    { id: "arb", name: "ARB", icon: "🔵", selected: false },
+    { id: "base", name: "BASE", icon: "🔵", selected: false },
+    { id: "sui", name: "SUI", icon: "🔷", selected: false },
+  ];
+
+  const tokens = [
+    { name: "ETH", symbol: "ETH", address: "ETH", icon: "🔷" },
+    { name: "USDC", symbol: "USDC", address: "0xA0b...06eB48", icon: "💲" },
+    { name: "AGA", symbol: "AGA", address: "0x87B...9Ea96C", icon: "🔺" },
+    { name: "ALT", symbol: "ALT", address: "0x845...c0fbfb", icon: "⚫" },
+    { name: "AUDIO", symbol: "AUDIO", address: "0x18a...658998", icon: "🟣" },
+    { name: "AVAIL", symbol: "AVAIL", address: "0xeaB...C786d8", icon: "🔵" },
+    { name: "BALL", symbol: "BALL", address: "0x393...1703Ca", icon: "🟠" },
+    { name: "BDXN", symbol: "BDXN", address: "0x8dB...7CB091", icon: "🟢" },
+  ];
+
+  const filteredTokens = tokens.filter(
+    (token) =>
+      token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="relative min-h-screen bg-background text-foreground">
+      <header className="flex items-center justify-between px-6 py-4 md:px-8">
+        <div className="flex items-center">
+          <h1 className="text-2xl font-bold text-white">NEAR intents</h1>
+        </div>
+
+        <nav className="hidden md:flex items-center space-x-8 text-sm">
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
+            className="text-foreground-secondary hover:text-white transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+            Bridge
           </a>
           <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
+            className="text-foreground-secondary hover:text-white transition-colors"
           >
-            Read our docs
+            USDC
           </a>
+          <a
+            href="#"
+            className="text-foreground-secondary hover:text-white transition-colors"
+          >
+            Explorer
+          </a>
+          <a
+            href="#"
+            className="text-foreground-secondary hover:text-white transition-colors"
+          >
+            Legacy Tools
+          </a>
+        </nav>
+
+        <button
+          className="md:hidden p-2"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </header>
+
+      {isMenuOpen && (
+        <div className="md:hidden bg-card border-b border-border">
+          <nav className="flex flex-col space-y-4 px-6 py-4">
+            <a
+              href="#"
+              className="text-foreground-secondary hover:text-white transition-colors"
+            >
+              Bridge
+            </a>
+            <a
+              href="#"
+              className="text-foreground-secondary hover:text-white transition-colors"
+            >
+              USDC
+            </a>
+            <a
+              href="#"
+              className="text-foreground-secondary hover:text-white transition-colors"
+            >
+              Explorer
+            </a>
+            <a
+              href="#"
+              className="text-foreground-secondary hover:text-white transition-colors"
+            >
+              Legacy Tools
+            </a>
+            <a
+              href="#"
+              className="text-foreground-secondary hover:text-white transition-colors"
+            >
+              FAQs
+            </a>
+          </nav>
+        </div>
+      )}
+
+      <main className="flex-1 flex items-center justify-center px-6 py-8">
+        <div className="w-full max-w-sm">
+          <div className="bg-card rounded-lg p-6 mb-4">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-foreground-secondary text-sm">From</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <button className="flex items-center space-x-3 bg-background-secondary rounded-lg px-4 py-3 hover:bg-card-hover transition-colors">
+                <Lock size={16} className="text-foreground-secondary" />
+                <span className="text-white">Select</span>
+              </button>
+              <span className="text-4xl font-light text-foreground-secondary">
+                0
+              </span>
+            </div>
+          </div>
+
+          <div className="flex justify-center mb-4">
+            <div className="w-8 h-8 rounded-full bg-card border border-border flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-foreground-secondary"></div>
+            </div>
+          </div>
+
+          <div className="bg-card rounded-lg p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-foreground-secondary text-sm">To</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <button className="flex items-center space-x-3 bg-background-secondary rounded-lg px-4 py-3 hover:bg-card-hover transition-colors">
+                <Lock size={16} className="text-foreground-secondary" />
+                <span className="text-white">Select</span>
+              </button>
+              <span className="text-4xl font-light text-foreground-secondary">
+                0
+              </span>
+            </div>
+          </div>
+
+          <button
+            className="w-full bg-accent hover:bg-accent-hover text-white font-medium py-4 px-6 rounded-lg transition-colors"
+            onClick={() => setShowNetworkModal(true)}
+          >
+            Connect source wallet
+          </button>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="absolute bottom-0 left-0 right-0 px-6 py-4 text-sm text-foreground-secondary">
+        <div className="flex items-center justify-between">
+          <div className="flex space-x-6">
+            <a href="#" className="hover:text-white transition-colors">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Terms of Service
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              FAQ
+            </a>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex space-x-3">
+              <a href="#" className="hover:text-white transition-colors">
+                𝕏
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Discord
+              </a>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span>Powered by</span>
+              <span className="font-bold">NEAR</span>
+            </div>
+          </div>
+        </div>
       </footer>
+
+      {showNetworkModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-background-secondary rounded-lg w-full max-w-md max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-border">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-white">
+                  Select a network
+                </h2>
+                <button
+                  onClick={() => setShowNetworkModal(false)}
+                  className="p-2 hover:bg-card-hover rounded transition-colors"
+                >
+                  <X size={20} className="text-foreground-secondary" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-6 gap-2 mb-4">
+                {networks.map((network) => (
+                  <button
+                    key={network.id}
+                    className={`flex flex-col items-center p-3 rounded-lg transition-colors ${
+                      network.selected
+                        ? "bg-accent text-white"
+                        : "bg-card hover:bg-card-hover text-foreground-secondary"
+                    }`}
+                  >
+                    <span className="text-lg mb-1">{network.icon}</span>
+                    <span className="text-xs font-medium">{network.name}</span>
+                  </button>
+                ))}
+                <button className="flex flex-col items-center p-3 rounded-lg bg-card hover:bg-card-hover text-foreground-secondary transition-colors">
+                  <Plus size={16} className="mb-1" />
+                  <span className="text-xs font-medium">other</span>
+                </button>
+              </div>
+
+              <div className="relative">
+                <Search
+                  size={16}
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary"
+                />
+                <input
+                  type="text"
+                  placeholder="Search for a token or paste an address"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-card text-white placeholder-foreground-secondary pl-10 pr-4 py-3 rounded-lg border border-border focus:border-accent focus:outline-none transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="overflow-y-auto max-h-96">
+              <div className="p-6">
+                <h3 className="text-sm text-foreground-secondary mb-4">
+                  All tokens
+                </h3>
+                <div className="space-y-2">
+                  {filteredTokens.map((token, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setShowNetworkModal(false)}
+                      className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-card transition-colors text-left"
+                    >
+                      <span className="text-lg">{token.icon}</span>
+                      <div className="flex-1">
+                        <div className="font-medium text-white">
+                          {token.name}
+                        </div>
+                        <div className="text-sm text-foreground-secondary">
+                          {token.symbol} • {token.address}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
