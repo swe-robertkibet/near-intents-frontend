@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, Lock, Search, Plus } from "lucide-react";
+import { Menu, X, Lock, Search, Plus, Wallet } from "lucide-react";
+import { useWallet } from "@/contexts/WalletContext";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showNetworkModal, setShowNetworkModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const { accountId, signIn, signOut, isLoading } = useWallet();
 
   const networks = [
     { id: "eth", name: "ETH", icon: "🔷", selected: true },
@@ -150,12 +152,37 @@ export default function Home() {
             </div>
           </div>
 
-          <button
-            className="w-full bg-accent hover:bg-accent-hover text-white font-medium py-4 px-6 rounded-lg transition-colors"
-            onClick={() => setShowNetworkModal(true)}
-          >
-            Connect source wallet
-          </button>
+          {!accountId ? (
+            <button
+              className="w-full bg-accent hover:bg-accent-hover text-white font-medium py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              onClick={signIn}
+              disabled={isLoading}
+            >
+              <Wallet size={20} />
+              <span>{isLoading ? "Loading..." : "Connect NEAR Wallet"}</span>
+            </button>
+          ) : (
+            <div className="space-y-3">
+              <div className="bg-card rounded-lg p-4">
+                <div className="text-sm text-foreground-secondary mb-1">Connected Account</div>
+                <div className="text-white font-medium">{accountId}</div>
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  className="flex-1 bg-accent hover:bg-accent-hover text-white font-medium py-4 px-6 rounded-lg transition-colors"
+                  onClick={() => setShowNetworkModal(true)}
+                >
+                  Select Network
+                </button>
+                <button
+                  className="bg-background-secondary hover:bg-card-hover text-white font-medium py-4 px-4 rounded-lg transition-colors"
+                  onClick={signOut}
+                >
+                  Disconnect
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
